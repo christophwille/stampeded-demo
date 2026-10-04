@@ -13,7 +13,7 @@ public class HerdReportTests
 		herd.Add(new Animal("0101", "LZY", 500));
 		herd.Add(new Animal("0201", "B7", 450));
 
-		string[] lines = HerdReport.Summarize(herd, new Pricing(4m)).Split(Environment.NewLine);
+		string[] lines = HerdReport.Summarize(herd, new PriceCalculator(4m)).Split(Environment.NewLine);
 
 		Assert.That(lines, Is.EqualTo(new[] {
 			"2 animals, 950 kg",

@@ -1,7 +1,7 @@
 namespace Corral;
 
 /// <summary>Turns weight into money.</summary>
-public sealed class Pricing(decimal pricePerKg)
+public sealed class PriceCalculator(decimal pricePerKg)
 {
 	public decimal PricePerKg { get; } = pricePerKg;
 

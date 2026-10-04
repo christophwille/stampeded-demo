@@ -12,7 +12,7 @@ public static class HerdReport
 	/// One line for the herd, one per brand, and the total. With <paramref name="weighed"/>
 	/// off, every animal counts at the flat price.
 	/// </summary>
-	public static string Summarize(Herd herd, Pricing pricing, bool weighed = true)
+	public static string Summarize(Herd herd, PriceCalculator pricing, bool weighed = true)
 	{
 		var text = new StringBuilder();
 		text.AppendLine(Line($"{"animal".ToQuantity(herd.Animals.Count)}, {herd.TotalWeight():0} kg"));

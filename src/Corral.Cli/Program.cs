@@ -26,4 +26,4 @@ herd.Add(new Animal("0103", "LZY", 641));
 herd.Add(new Animal("0201", "B7", 455));
 herd.Add(new Animal("0202", "B7", 297) { Born = new DateOnly(2025, 5, 19) });
 
-Console.WriteLine(HerdReport.Summarize(herd, new Pricing(price), weighed: !args.Contains("--flat")));
+Console.WriteLine(HerdReport.Summarize(herd, new PriceCalculator(price), weighed: !args.Contains("--flat")));
