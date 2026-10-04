@@ -34,6 +34,16 @@ public class HerdTests
 		Assert.That(Sample().ByBrand("lzy").Select(a => a.Tag), Is.EqualTo(new[] { "0101", "0102" }));
 	}
 
+	[Test]
+	public void Yearlings_AreInTheirSecondYear()
+	{
+		var herd = Sample();
+		herd.Add(new Animal("0103", "LZY", 320) { Born = new DateOnly(2025, 4, 2) });
+		herd.Add(new Animal("0104", "LZY", 180) { Born = new DateOnly(2026, 3, 30) });
+
+		Assert.That(herd.Yearlings(new DateOnly(2026, 10, 1)).Select(a => a.Tag), Is.EqualTo(new[] { "0103" }));
+	}
+
 	[TestCase("B7", true)]
 	[TestCase("LZY", true)]
 	[TestCase("B", false)]

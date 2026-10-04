@@ -34,4 +34,8 @@ public sealed class Herd
 
 	public IEnumerable<Animal> ByBrand(string brand)
 		=> animals.Where(a => a.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase));
+
+	/// <summary>The animals in their second year, which is when they are usually sold.</summary>
+	public IEnumerable<Animal> Yearlings(DateOnly today)
+		=> animals.Where(a => a.AgeInYears(today) == 1);
 }

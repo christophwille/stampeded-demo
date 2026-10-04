@@ -21,9 +21,9 @@ var herd = new Herd();
 herd.RegisterBrand("LZY", "Lazy Y Ranch");
 herd.RegisterBrand("B7", "Bar Seven");
 herd.Add(new Animal("0101", "LZY", 512));
-herd.Add(new Animal("0102", "LZY", 338));
+herd.Add(new Animal("0102", "LZY", 338) { Born = new DateOnly(2025, 4, 2) });
 herd.Add(new Animal("0103", "LZY", 641));
 herd.Add(new Animal("0201", "B7", 455));
-herd.Add(new Animal("0202", "B7", 297));
+herd.Add(new Animal("0202", "B7", 297) { Born = new DateOnly(2025, 5, 19) });
 
 Console.WriteLine(HerdReport.Summarize(herd, new Pricing(price), weighed: !args.Contains("--flat")));
