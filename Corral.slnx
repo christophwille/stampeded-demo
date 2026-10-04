@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Corral/Corral.csproj" />
+    <Project Path="src/Corral.Cli/Corral.Cli.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Corral.Tests/Corral.Tests.csproj" />
+  </Folder>
+</Solution>
