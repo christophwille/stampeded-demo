@@ -33,5 +33,6 @@ public sealed class Herd
 	public double TotalWeight() => animals.Sum(a => a.WeightKg);
 
 	public IEnumerable<Animal> ByBrand(string brand)
-		=> animals.Where(a => a.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase));
+		=> animals.Where(a => a.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase))
+			.OrderBy(a => a.Tag, StringComparer.Ordinal);
 }
