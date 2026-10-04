@@ -38,6 +38,23 @@ public class HerdTests
 	}
 
 	[Test]
+	public void Remove_SaysWhetherTheTagWasThere()
+	{
+		var herd = Sample();
+		Assert.That(herd.Remove("0102"), Is.True);
+		Assert.That(herd.Remove("0102"), Is.False);
+	}
+
+	[Test]
+	public void Remove_TakesTheAnimalOutOfTheTotal()
+	{
+		var herd = Sample();
+		Assert.That(herd.TotalWeight(), Is.EqualTo(1250));
+		herd.Remove("0102");
+		Assert.That(herd.TotalWeight(), Is.EqualTo(950));
+	}
+
+	[Test]
 	public void ByBrand_IgnoresCase()
 	{
 		Assert.That(Sample().ByBrand("lzy").Select(a => a.Tag), Is.EqualTo(new[] { "0101", "0102" }));

@@ -18,6 +18,21 @@ public sealed class Herd
 		totalWeight = null;
 	}
 
+	/// <summary>Takes an animal out of the herd. False when no animal carries that tag.</summary>
+	public bool Remove(string tag)
+	{
+		return animals.RemoveAll(a => a.Tag == tag) > 0;
+	}
+
+	/// <summary>Empties the herd, as after a sale of the whole ranch. The brands stay.</summary>
+	public void Clear()
+	{
+		if (animals.Count == 0)
+			return;
+		animals.Clear();
+		totalWeight = null;
+	}
+
 	/// <summary>A brand is two to four capital letters or digits, e.g. "B7" or "LZY".</summary>
 	public static bool IsValidBrand(string brand)
 		=> brand.Length is >= 2 and <= 4 && brand.All(c => char.IsAsciiLetterUpper(c) || char.IsAsciiDigit(c));
