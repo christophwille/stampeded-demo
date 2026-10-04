@@ -6,8 +6,7 @@ if (args.Contains("--help"))
 {
 	Console.WriteLine("Prints the sample herd and what it is woth.");
 	Console.WriteLine();
-	Console.WriteLine("corral [--flat] [--price <per kg>]");
-	Console.WriteLine("  --flat    price every animal as if it weighed 450 kg");
+	Console.WriteLine("corral [--price <per kg>]");
 	Console.WriteLine("  --price   price per kilogram, default 4.20");
 	return;
 }
@@ -26,4 +25,4 @@ herd.Add(new Animal("0103", "LZY", 641));
 herd.Add(new Animal("0201", "B7", 455));
 herd.Add(new Animal("0202", "B7", 297) { Born = new DateOnly(2025, 5, 19) });
 
-Console.WriteLine(HerdReport.Summarize(herd, new Pricing(price), weighed: !args.Contains("--flat")));
+Console.WriteLine(HerdReport.Summarize(herd, new PriceCalculator(price)));
