@@ -4,7 +4,7 @@ using Corral;
 
 if (args.Contains("--help"))
 {
-	Console.WriteLine("Prints the sample herd and what it is woth.");
+	Console.WriteLine("Prints the sample herd and what it is worth.");
 	Console.WriteLine();
 	Console.WriteLine("corral [--flat] [--price <per kg>]");
 	Console.WriteLine("  --flat    price every animal as if it weighed 450 kg");
