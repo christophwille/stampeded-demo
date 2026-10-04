@@ -5,6 +5,7 @@ public sealed class Herd
 {
 	readonly List<Animal> animals = [];
 	readonly Dictionary<string, string> owners = new(StringComparer.OrdinalIgnoreCase);
+	double? totalWeight;
 
 	public IReadOnlyList<Animal> Animals => animals;
 
@@ -14,6 +15,22 @@ public sealed class Herd
 		if (!owners.ContainsKey(animal.Brand))
 			throw new InvalidOperationException($"Brand '{animal.Brand}' is not registered.");
 		animals.Add(animal);
+		totalWeight = null;
+	}
+
+	/// <summary>Takes an animal out of the herd. False when no animal carries that tag.</summary>
+	public bool Remove(string tag)
+	{
+		return animals.RemoveAll(a => a.Tag == tag) > 0;
+	}
+
+	/// <summary>Empties the herd, as after a sale of the whole ranch. The brands stay.</summary>
+	public void Clear()
+	{
+		if (animals.Count == 0)
+			return;
+		animals.Clear();
+		totalWeight = null;
 	}
 
 	/// <summary>A brand is two to four capital letters or digits, e.g. "B7" or "LZY".</summary>
@@ -30,7 +47,11 @@ public sealed class Herd
 
 	public string? OwnerOf(string brand) => owners.GetValueOrDefault(brand);
 
-	public double TotalWeight() => animals.Sum(a => a.WeightKg);
+	/// <summary>
+	/// The weight of the whole herd. Summed once and kept until the herd changes: the report
+	/// asks for it per line.
+	/// </summary>
+	public double TotalWeight() => totalWeight ??= animals.Sum(a => a.WeightKg);
 
 	public IEnumerable<Animal> ByBrand(string brand)
 		=> animals.Where(a => a.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase));
