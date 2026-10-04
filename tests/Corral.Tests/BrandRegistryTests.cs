@@ -20,6 +20,12 @@ public class BrandRegistryTests
 	}
 
 	[Test]
+	public void Register_RefusesABrandNobodyOwns()
+	{
+		Assert.That(() => new BrandRegistry().Register("B7", " "), Throws.ArgumentException);
+	}
+
+	[Test]
 	public void IsRegistered_IgnoresCase()
 	{
 		var brands = new BrandRegistry();

@@ -20,6 +20,8 @@ public sealed class BrandRegistry : IBrandRegistry
 	{
 		if (!Herd.IsValidBrand(brand))
 			throw new ArgumentException($"'{brand}' is not a valid brand.", nameof(brand));
+		if (string.IsNullOrWhiteSpace(owner))
+			throw new ArgumentException("A brand belongs to somebody.", nameof(owner));
 		owners[brand] = owner;
 	}
 
