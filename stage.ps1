@@ -6,7 +6,7 @@ Puts this repository back into the state the Stampeded! feature tours are writte
 Every staged branch is kept as a tag under stage/, so a branch that was merged, force-pushed
 or deleted is one push away from what it was. Without a switch: main and the four branches go
 back to their tags, a pull request is opened for every branch that has none open, and the
-seed review comments are posted where there are no comments yet.
+review comments are replaced by the seed ones.
 
 Needs git, gh (logged in, with write access to the repository) and PowerShell 7.
 
@@ -49,6 +49,15 @@ function Add-Comment($repo, $number, $rev, $path, $text, $body) {
 	$line = Find-Line $rev $path $text
 	Invoke-Tool gh api "repos/$repo/pulls/$number/comments" `
 		-f "body=$body" -f "commit_id=$sha" -f "path=$path" -F "line=$line" -f side=RIGHT --jq .id
+}
+
+# Every review comment on a pull request, newest first: a reply goes before what it answers.
+function Remove-Comments($repo, $number) {
+	$ids = @(Invoke-Tool gh api "repos/$repo/pulls/$number/comments" --paginate --jq '.[].id')
+	[array]::Reverse($ids)
+	foreach ($id in $ids) {
+		Invoke-Tool gh api -X DELETE "repos/$repo/pulls/comments/$id" | Out-Null
+	}
 }
 
 Invoke-Tool git fetch origin --tags --force --quiet
@@ -160,8 +169,12 @@ animal fetches about a tenth more per kilogram, a light one about a tenth less.
 $pricing = $numbers['feature/weight-pricing']
 Invoke-Tool gh pr edit $pricing --body $branches['feature/weight-pricing'].Body.Replace('#ISSUE', "#$issue") | Out-Null
 
-# Seed comments, only where nobody has commented: a second run must not post them twice.
-if (-not (Invoke-Tool gh api "repos/$repo/pulls/$pricing/comments" --jq '.[0].id // empty')) {
+# The comments go back to the seed ones: whatever a tour, or a visitor, has said since is
+# removed first, so that a second run leaves what the first one did.
+foreach ($number in $numbers.Values) {
+	Remove-Comments $repo $number
+}
+& {
 	Add-Comment $repo $pricing 'stage/weight-pricing' 'src/Corral/PriceCalculator.cs' '< 350 => WeightClass.Light' @'
 The table in `docs/pricing.md` says light is *up to* 350 kg, which reads as inclusive. Here a 350 kg animal is Standard. Which one is meant?
 '@ | Out-Null
@@ -181,7 +194,7 @@ Is this the enum's order or alphabetical? Heavy before light would read oddly.
 }
 
 $registry = $numbers['feature/brand-registry']
-if (-not (Invoke-Tool gh api "repos/$repo/pulls/$registry/comments" --jq '.[0].id // empty')) {
+& {
 	Add-Comment $repo $registry 'stage/brand-registry-v1' 'src/Corral/Herd.cs' 'if (brand.All(char.IsAsciiDigit))' @'
 The commit message says why an all-digit brand is refused; the code does not. The next reader will take this for a mistake and delete it.
 '@ | Out-Null
