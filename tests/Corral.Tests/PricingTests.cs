@@ -14,8 +14,9 @@ public class PricingTests
 	[Test]
 	public void PriceFor_AHerd_IsTheSumOfItsAnimals()
 	{
-		var herd = new Herd();
-		herd.RegisterBrand("LZY", "Lazy Y Ranch");
+		var brands = new BrandRegistry();
+		brands.Register("LZY", "Lazy Y Ranch");
+		var herd = new Herd(brands);
 		herd.Add(new Animal("0101", "LZY", 500));
 		herd.Add(new Animal("0102", "LZY", 300));
 		Assert.That(new Pricing(4m).PriceFor(herd), Is.EqualTo(3200m));
