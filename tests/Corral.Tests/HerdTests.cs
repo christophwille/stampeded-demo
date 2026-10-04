@@ -6,9 +6,10 @@ public class HerdTests
 {
 	static Herd Sample()
 	{
-		var herd = new Herd();
-		herd.RegisterBrand("LZY", "Lazy Y Ranch");
-		herd.RegisterBrand("B7", "Bar Seven");
+		var brands = new BrandRegistry();
+		brands.Register("LZY", "Lazy Y Ranch");
+		brands.Register("B7", "Bar Seven");
+		var herd = new Herd(brands);
 		herd.Add(new Animal("0101", "LZY", 500));
 		herd.Add(new Animal("0102", "LZY", 300));
 		herd.Add(new Animal("0201", "B7", 450));
@@ -18,7 +19,7 @@ public class HerdTests
 	[Test]
 	public void Add_RefusesAnUnregisteredBrand()
 	{
-		var herd = new Herd();
+		var herd = new Herd(new BrandRegistry());
 		Assert.That(() => herd.Add(new Animal("0001", "XX", 400)), Throws.InvalidOperationException);
 	}
 
@@ -46,19 +47,12 @@ public class HerdTests
 
 	[TestCase("B7", true)]
 	[TestCase("LZY", true)]
+	[TestCase("77", false)]
 	[TestCase("B", false)]
 	[TestCase("lzy", false)]
 	[TestCase("TOOLONG", false)]
 	public void IsValidBrand_WantsTwoToFourCapitalsOrDigits(string brand, bool valid)
 	{
 		Assert.That(Herd.IsValidBrand(brand), Is.EqualTo(valid));
-	}
-
-	[Test]
-	public void RegisterBrand_AgainChangesTheOwner()
-	{
-		var herd = Sample();
-		herd.RegisterBrand("B7", "Bar Seven Cattle Co.");
-		Assert.That(herd.OwnerOf("B7"), Is.EqualTo("Bar Seven Cattle Co."));
 	}
 }

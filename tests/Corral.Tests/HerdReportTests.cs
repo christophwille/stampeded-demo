@@ -7,9 +7,10 @@ public class HerdReportTests
 	[Test]
 	public void Summarize_ListsBrandsInOrderAndTheTotal()
 	{
-		var herd = new Herd();
-		herd.RegisterBrand("LZY", "Lazy Y Ranch");
-		herd.RegisterBrand("B7", "Bar Seven");
+		var brands = new BrandRegistry();
+		brands.Register("LZY", "Lazy Y Ranch");
+		brands.Register("B7", "Bar Seven");
+		var herd = new Herd(brands);
 		herd.Add(new Animal("0101", "LZY", 500));
 		herd.Add(new Animal("0201", "B7", 450));
 
