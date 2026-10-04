@@ -148,13 +148,14 @@ foreach ($branch in $branches.Keys) {
 # The issue the first pull request closes. Opened after the pull requests, so that they keep
 # the low numbers a reader types.
 $issueTitle = 'Heavy animals sell for too little'
-$issue = Invoke-Tool gh issue list --state open --search "$issueTitle in:title" --json number --jq '.[0].number // empty'
+$issue = Invoke-Tool gh issue list --state open --json 'number,title' `
+	--jq "map(select(.title == `"$issueTitle`")) | .[0].number // empty"
 if (-not $issue) {
-	Invoke-Tool gh issue create --title $issueTitle --body @'
+	# The search index lags behind a new issue; the URL gh prints does not.
+	$issue = (Invoke-Tool gh issue create --title $issueTitle --body @'
 `corral` prices every animal at the same rate per kilogram. The sale barn does not: a heavy
 animal fetches about a tenth more per kilogram, a light one about a tenth less.
-'@ | Out-Null
-	$issue = Invoke-Tool gh issue list --state open --search "$issueTitle in:title" --json number --jq '.[0].number // empty'
+'@ | Select-Object -Last 1).Split('/')[-1]
 }
 $pricing = $numbers['feature/weight-pricing']
 Invoke-Tool gh pr edit $pricing --body $branches['feature/weight-pricing'].Body.Replace('#ISSUE', "#$issue") | Out-Null
