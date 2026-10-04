@@ -17,9 +17,11 @@ int at = Array.IndexOf(args, "--price");
 if (at >= 0 && at + 1 < args.Length)
 	price = decimal.Parse(args[at + 1], CultureInfo.InvariantCulture);
 
-var herd = new Herd();
-herd.RegisterBrand("LZY", "Lazy Y Ranch");
-herd.RegisterBrand("B7", "Bar Seven");
+var brands = new BrandRegistry();
+brands.Register("LZY", "Lazy Y Ranch");
+brands.Register("B7", "Bar Seven");
+
+var herd = new Herd(brands);
 herd.Add(new Animal("0101", "LZY", 512));
 herd.Add(new Animal("0102", "LZY", 338));
 herd.Add(new Animal("0103", "LZY", 641));

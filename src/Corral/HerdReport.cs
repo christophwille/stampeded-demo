@@ -19,7 +19,7 @@ public static class HerdReport
 		foreach (var brand in herd.Animals.GroupBy(a => a.Brand).OrderBy(g => g.Key))
 		{
 			decimal value = brand.Sum(a => weighed ? pricing.PriceFor(a) : pricing.FlatPrice(a));
-			text.AppendLine(Line($"  {brand.Key} ({herd.OwnerOf(brand.Key)}): {brand.Count()} head, {value:0.00}"));
+			text.AppendLine(Line($"  {brand.Key} ({herd.Brands.OwnerOf(brand.Key)}): {brand.Count()} head, {value:0.00}"));
 		}
 		text.Append(Line($"total {pricing.PriceFor(herd):0.00}"));
 		return text.ToString();
